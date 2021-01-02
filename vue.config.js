@@ -1,14 +1,19 @@
 const path = require('path')
 module.exports = {
+    lintOnSave : false,
     css: {     // 配置sass
         loaderOptions: {
             // 给 sass-loader 传递选项
             sass: {
-                prependData: `@import "./src/assets/css/variables.scss";`
+                data: `@import "./src/assets/css/variables.scss";`
             }
         }
     },
   devServer: {     // 设置代理跨域
+    overlay : {
+      warning : false,
+      errors : false
+    },
     proxy: {
       "/api": {
         //代理api

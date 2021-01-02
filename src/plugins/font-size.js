@@ -5,9 +5,6 @@ var scale = window.innerWidth / designWidth    // 当前屏幕的宽度与设计
 
 document.addEventListener('DOMContentLoaded' , ()=>{
     const html = document.querySelector('html');
-
-
-
     html.style.fontSize =  scale *  remPx   + 'px'
 })
 
