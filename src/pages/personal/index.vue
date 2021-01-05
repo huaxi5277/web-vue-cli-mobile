@@ -121,6 +121,12 @@ export default {
    password(){},
    quit(){}
   },
+  created(){
+   let token = localStorage.getItem('token')
+   this.$axios.get('api/idle/current').then((ret)=>{
+     console.log(ret)
+   })
+  },
   mounted(){
     
   },

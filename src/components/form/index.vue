@@ -9,10 +9,10 @@
                 <l-input  v-model="model.email"></l-input>
             </l-form-item>
              <l-form-item label="密码：" prop="password">
-                <l-input type="password"></l-input>
+                <l-input type="password" v-model="model.password"></l-input>
             </l-form-item>
              <l-form-item>
-                <l-button  v-model="model.password"></l-button>
+                <l-button ></l-button>
             </l-form-item>
         </l-form>
      <div class="bottom-container">
@@ -29,6 +29,7 @@ import form from '@/components/form/form.vue'
 import formItem from '@/components/form/form-item.vue'
 import input from '@/components/form/input.vue'
 import button from '@/components/form/button.vue'
+import {Toast} from 'mint-ui'
 export default {
     name : 'form-root',
     data(){
@@ -39,11 +40,17 @@ export default {
             password : ""
            },
            rules : {
-               username : [{required : true , message : "用户名必填!"}],
-               email : [{required : true , message : "邮箱必填!"}],
-               password : [{required : true , message : "密码必填!"}]
+               username : [{required : true , message : "用户名必填!" , tigger : 'blur'} ,],
+               email : [{required : true , message : "邮箱必填!" , tigger : 'blur'} ],  // { type: 'email', message: '邮箱格式不正确!', trigger: 'blur' }
+               password : [{required : true , message : "密码必填!" , tigger : 'blur'} ]  // { min : 6, max : 8, message: `长度在6~8个字符`, trigger: 'blur' }
            }
         }
+    },
+    props : {
+     flag : {
+         type : String,
+         default : ''
+     }
     },
     components :{
         'l-form' : form,
@@ -57,20 +64,71 @@ export default {
         })
     },
     methods :{
+         octopus(type){
+            switch(type) {
+                case 'register' : 
+                this.register()
+                break;
+                case 'login' : 
+                this.login()
+                break;
+            }
+        },
         submit(){
             this.$refs.form.validate(isValid =>{
                 if(isValid) {
-                    alert('登录成功')
+                    console.log(this.flag)
+                    this.octopus(this.flag)
                 } else {
-                    alert('登录失败')
                 }
             })
+        },
+        register(){
+            this.$axios.post('api/idle/register' , this.model).then((ret)=>{
+                             Toast({
+                              message: ret.data.message,
+                              position: 'middle',
+                              duration: 5000
+                            });
+                        if(ret.data.code == 200 ) {
+                             this.$router.push('/login')
+                        }  
+                       
+                    })
+        },
+        login(){
+            this.$axios.post('api/idle/login' , this.model).then((ret)=>{
+                         Toast({
+                              message: ret.data.message,
+                              position: 'middle',
+                              duration: 5000
+                            });
+                        if(ret.data.code == 404 ) {
+                            this.$router.push('/register')
+                        } else if (ret.data.code == 400 ) {
+                            this.model = {
+                                username : "",
+                                password : "",
+                                email : ""
+                            }
+                        } else {
+                            localStorage.setItem("token"  , ret.data.token )
+                            localStorage.setItem("id"  , ret.data.id )
+                            this.$router.push('/')
+                        }
+                    })
         }
-    }
+    },
+
 }
 </script>
 
 <style lang="scss" scoped>
+/deep/ .mint-indicator {
+    &-wrapper {
+        z-index: 9999999;
+    }
+}
 .form-box{
      .form-container{
      width: 100%;

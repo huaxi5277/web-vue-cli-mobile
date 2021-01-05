@@ -1,6 +1,6 @@
 <template>
-    <div class="btn-group">
-        <div class="btn-group-item" @click="submit">提交</div>
+    <div class="btn-group" @click="submit">
+        <div class="btn-group-item">提交</div>
     </div>
 </template>
 
