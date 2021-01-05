@@ -1,5 +1,7 @@
 const path = require('path')
 module.exports = {
+  publicPath: './', //在 baseUrl前面加个点baseUrl: './'
+  outputDir: 'dist',
     lintOnSave : false,
     css: {     // 配置sass
         loaderOptions: {
@@ -9,6 +11,7 @@ module.exports = {
             }
         }
     },
+    runtimeCompiler: true, 
   devServer: {     // 设置代理跨域
     overlay : {
       warning : false,

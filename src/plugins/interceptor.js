@@ -49,6 +49,7 @@ axios.interceptors.request.use(
         return config
     },
     error =>{
+      console.log(error.response)
         return Promise.reject(error)
     }
 )
@@ -56,12 +57,14 @@ axios.interceptors.request.use(
 // 响应拦截器
 axios.interceptors.response.use(
     response => {
-    console.log(response)
     tryHideFullScreenLoading()
     return response
     },
     error =>{
-        console.log(error)
+      if(error.response.status == 401) {
+        tryHideFullScreenLoading()
+          location.href = '#/login'
+      }
         return Promise.reject(error)
     }
 )

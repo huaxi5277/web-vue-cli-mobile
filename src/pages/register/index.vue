@@ -1,6 +1,6 @@
 <template>
      <div>
-         <l-nav pageName="注册" :isShowBack="true"></l-nav>
+         <l-nav pageName="注册" :isShowBack="true" @goBack="goBack"></l-nav>
          <l-form :flag="flag"></l-form> 
      </div>
 </template>
@@ -20,6 +20,11 @@ export default {
         'l-form' : form
     },
     mounted(){
+    },
+    methods : {
+        goBack(){
+            this.$router.go(-1)
+        }
     }
 }
 </script>

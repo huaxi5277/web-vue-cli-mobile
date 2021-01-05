@@ -4,14 +4,14 @@
     <div class="person-name-box">
       <div class="person-name-box-top">
         <div class="person-name-box-top-img-left">
-          <img class="person-name-box-top-img-box-avator" alt="" src="@/assets/images/avater.png">
+          <img class="person-name-box-top-img-box-avator"  alt="" :src="user.avator" >
         </div>
         <div class="person-name-box-top-img-right">
           <div class="person-name-box-top-img-right-username">
-            狗子博
+            {{user.data  }}
           </div>
           <div class="person-name-box-top-img-right-vip">
-            小狗子
+             {{user.email }} 
           </div>
         </div>
       </div>
@@ -105,7 +105,14 @@ export default {
        isMantle : false,
        plus,
        error,
-       isFrist : false
+       isFrist : false,
+       user : {},
+       avator : "",
+       init : {
+         user : "登录",
+         email : "",
+        avator : require('@/assets/images/avater.png')
+       }
     }
   },
   methods : {
@@ -122,13 +129,14 @@ export default {
    quit(){}
   },
   created(){
-   let token = localStorage.getItem('token')
-   this.$axios.get('api/idle/current').then((ret)=>{
-     console.log(ret)
-   })
   },
   mounted(){
-    
+    this.$nextTick(()=>{
+     this.$axios.get('api/idle/current').then((ret)=>{
+     this.user = ret.data
+     this.avator =  this.user.avator
+   })
+   })
   },
   components : {
     'l-nav' : navtationBar

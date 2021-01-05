@@ -27,7 +27,7 @@ export default {
         }
     },
     methods : {
-        validate(){
+        validateFormItem(){
           const rules = this.form.rules[this.prop]
           const value = this.form.model[this.prop]
           // 校验
@@ -46,7 +46,7 @@ export default {
     },
     mounted(){
         this.$on('validate' , ()=>{
-            this.validate()
+            this.validateFormItem()
         })
     }
 }

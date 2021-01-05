@@ -1,6 +1,6 @@
 <template>
    <div class="nav-bar" :style="navBarStyle" :class="[{'bottom-line' : pageName}]">
-        <div class="left">
+        <div class="left" @click="$emit('goBack')">
             <!-- 默认状态 -->
              <img :src="back" v-if="isDefault&&isShowBack"  />
              <!-- 具名插槽 -->

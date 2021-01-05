@@ -41,8 +41,8 @@ export default {
            },
            rules : {
                username : [{required : true , message : "用户名必填!" , tigger : 'blur'} ,],
-               email : [{required : true , message : "邮箱必填!" , tigger : 'blur'} ],  // { type: 'email', message: '邮箱格式不正确!', trigger: 'blur' }
-               password : [{required : true , message : "密码必填!" , tigger : 'blur'} ]  // { min : 6, max : 8, message: `长度在6~8个字符`, trigger: 'blur' }
+               email : [{required : true , message : "邮箱必填!" , tigger : 'blur'} ,  { type: 'email', message: '邮箱格式不正确!', trigger: 'blur' }],  // { type: 'email', message: '邮箱格式不正确!', trigger: 'blur' }
+               password : [{required : true , message : "密码必填!" , tigger : 'blur'} ,  { min : 6, max : 8, message: `长度在6~8个字符`, trigger: 'blur' } ]  // { min : 6, max : 8, message: `长度在6~8个字符`, trigger: 'blur' }
            }
         }
     },
@@ -65,30 +65,32 @@ export default {
     },
     methods :{
          octopus(type){
-            switch(type) {
-                case 'register' : 
-                this.register()
-                break;
-                case 'login' : 
-                this.login()
-                break;
-            }
+             console.log(type )
+             if(type == 'register') {
+                  this.register()
+             } else if(type == 'login') {
+                 this.login()
+             }
         },
         submit(){
-            this.$refs.form.validate(isValid =>{
+  
+            this.$nextTick(()=>{
+                if(this.$refs.form) {
+                      this.$refs.form.validateForm(isValid =>{
                 if(isValid) {
-                    console.log(this.flag)
                     this.octopus(this.flag)
-                } else {
                 }
+            })
+                }
+              
             })
         },
         register(){
-            this.$axios.post('api/idle/register' , this.model).then((ret)=>{
+            this.$axios.post('api/idle/register' , this.model).then((ret)=>{ 
                              Toast({
                               message: ret.data.message,
                               position: 'middle',
-                              duration: 5000
+                              duration: 1000
                             });
                         if(ret.data.code == 200 ) {
                              this.$router.push('/login')
@@ -98,11 +100,6 @@ export default {
         },
         login(){
             this.$axios.post('api/idle/login' , this.model).then((ret)=>{
-                         Toast({
-                              message: ret.data.message,
-                              position: 'middle',
-                              duration: 5000
-                            });
                         if(ret.data.code == 404 ) {
                             this.$router.push('/register')
                         } else if (ret.data.code == 400 ) {

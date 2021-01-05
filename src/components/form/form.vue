@@ -22,8 +22,8 @@ export default {
         }
     },
     methods : {
-        validate(cb) {
-         const task = this.$children.filter(item => item.prop).map(item=>item.validate()) 
+        validateForm(cb) {
+         const task = this.$children.filter(item => item.prop).map(item=>item.validateFormItem()) 
          Promise.all(task).then(()=>{
            cb(true)
          }).catch(()=>{
