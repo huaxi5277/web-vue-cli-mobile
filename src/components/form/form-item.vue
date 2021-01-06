@@ -45,6 +45,7 @@ export default {
         }
     },
     mounted(){
+        console.log(this.label)
         this.$on('validate' , ()=>{
             this.validateFormItem()
         })

@@ -93,8 +93,27 @@
 
         <div class="review-password-container" v-else @click.stop="reviewHandleClick">
         <div class="review-password-container-box">
-          <mt-field label="输入旧密码" placeholder="Input old password" type="password" v-model="review.oldpassword"></mt-field>
-          <mt-field label="输入新密码" placeholder="Input new password" type="password" v-model="review.newpassword"></mt-field>
+         <a-form :form="form" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
+           <a-form-item label="旧密码">
+             <a-input 
+              type="password"   
+             v-decorator="['oldpassword', { rules: [{ required: true, message: 'Please input your oldpassword!' }] }]"
+      />  
+           </a-form-item>
+             <a-form-item label="新密码">
+             <a-input    type="password"
+             v-decorator="['newpassword', { rules: [{ required: true, message: 'Please input your newpassword!' }] }]"
+      />  
+           </a-form-item>
+            <a-form-item :wrapper-col="{ span: 12, offset: 12 }">
+              <a-button  @click="handleSubmit">
+        取消
+      </a-button>
+      <a-button type="primary" @click="handleSubmit" style="margin-left : 0.3rem ">
+        提交
+      </a-button>
+    </a-form-item>
+         </a-form>
         </div>
     </div>
     </div>
@@ -105,10 +124,13 @@
 import navtationBar from '@/components/navgation.vue'
 import plus from '@/assets/images/plus.svg'
 import error from '@/assets/images/error.svg'
+import {Toast} from 'mint-ui'
 export default {
   name : 'personal',
   data () {
     return {
+       form: this.$form.createForm(this, { name: 'coordinated' }),
+       formLayout: 'horizontal',
        isMantle : false,
        plus,
        error,
@@ -119,10 +141,6 @@ export default {
          user : "登录",
          email : "",
         avator : require('@/assets/images/avater.png')
-       },
-       review : {
-         oldpassword : '',
-         newpassword : ''
        },
        isView : true,
        isViewButton : true,
@@ -152,7 +170,36 @@ export default {
    },
    reviewHandleClick(){
      
-   }
+   },
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          console.log('Received values of form: ', values);
+          let id = localStorage.getItem('id')
+          this.$axios.post('api/idle/reviewpassword' , {
+            id,
+            oldpassword : values.oldpassword,
+            newpassword : values.newpassword
+          }).then((ret)=>{
+             Toast({
+                    message: ret.data.message,
+                    position: 'middle',
+                    duration: 1000
+                    });
+
+                    if(ret.data.code == '00000' || ret.data.code == '11111') {
+                        this.closeMantle()
+                        localStorage.removeItem('id')
+                         localStorage.removeItem('token')
+                         this.$router.push('/login')
+                    } 
+                    this.closeMantle()
+
+          })
+        }
+      });
+    },
   },
   created(){
   },
@@ -440,7 +487,7 @@ export default {
    align-items: center;
    &-box{
      width: 80%;
-     height: 70%;
+     height: 90%;
     .mint-field-core{
         width: 80%;
       border: 1px solid #d9d9d9;

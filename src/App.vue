@@ -37,7 +37,7 @@ export default {
     // 新页面进入
     .fold-left-enter-active {
       animation-name: fold-left-in;
-      animation-duration: .4s;
+      animation-duration: .4ss;
     }
     // 老页面移出
     .fold-left-leave-active {

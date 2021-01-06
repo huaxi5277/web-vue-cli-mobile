@@ -40,8 +40,7 @@ export default {
 <style lang="scss" scoped>
 .input-container{
     width: 100%;
-    height: 1.8rem;
-    margin-top: -0.5rem ;
+    height: 1.2rem;
      input {
        padding: 0.05rem;
        width: 100%;
