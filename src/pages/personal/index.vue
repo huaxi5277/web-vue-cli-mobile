@@ -60,11 +60,11 @@
         </div>
       </div>
     </div>
-    <div class="plus" :style="{backgroundColor : isMantle ? '#fff' : '#f9f804'}"> 
+    <div class="plus" :style="{backgroundColor : isMantle ? '#fff' : '#f9f804'}" v-if="isViewButton"> 
       <img :src="plus" @click="showMantle"  :class="[{rotate_p : isMantle} , {rotate_x : !isMantle && isFrist}]"  />
     </div>
-    <div class="mantle-box" v-if="isMantle" @click="openMantle">
-       <ul class="mantle-box-item-container">
+    <div class="mantle-box" v-if="isMantle" @click="closeMantle">
+       <ul class="mantle-box-item-container" v-if="isView">
          <li class="mantle-box-item-container-li" @click.stop="publish">
            <div class="mantle-box-item-container-li-item">
              <div class="mantle-box-item-container-li-item-img item1" >
@@ -90,6 +90,13 @@
            </div>
          </li>
        </ul>
+
+        <div class="review-password-container" v-else @click.stop="reviewHandleClick">
+        <div class="review-password-container-box">
+          <mt-field label="输入旧密码" placeholder="Input old password" type="password" v-model="review.oldpassword"></mt-field>
+          <mt-field label="输入新密码" placeholder="Input new password" type="password" v-model="review.newpassword"></mt-field>
+        </div>
+    </div>
     </div>
   </div>
 </template>
@@ -112,21 +119,40 @@ export default {
          user : "登录",
          email : "",
         avator : require('@/assets/images/avater.png')
-       }
+       },
+       review : {
+         oldpassword : '',
+         newpassword : ''
+       },
+       isView : true,
+       isViewButton : true,
     }
   },
   methods : {
    showMantle(){
      this.isFrist = true
-     this.isMantle = !this.isMantle
+     this.isMantle = true
+     this.isViewButton = true
+     this.isView = true
    },
-   openMantle(){
+   closeMantle(){
      this.isFrist = true
+     this.isViewButton = true
      this.isMantle = false
    },
    publish(){},
-   password(){},
-   quit(){}
+   password(){
+     this.isView = false
+     this.isViewButton = false
+   },
+   quit(){
+     localStorage.removeItem('id')
+     localStorage.removeItem('token')
+     this.$router.push('/login')
+   },
+   reviewHandleClick(){
+     
+   }
   },
   created(){
   },
@@ -394,6 +420,52 @@ export default {
    } 
    to {
      opacity: 1;
+   }
+ }
+
+
+
+
+ /deep/.review-password-container{
+   width: 100%;
+   height: 5rem;
+   background-color: #ffffff ;
+   position: fixed;
+   bottom : -5rem;
+   border-top-left-radius: 0.4rem;
+   border-top-right-radius: 0.4rem;
+   animation: tranlate_bottom_to_top 1s forwards;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   &-box{
+     width: 80%;
+     height: 70%;
+    .mint-field-core{
+        width: 80%;
+      border: 1px solid #d9d9d9;
+      padding: 0.04rem 0.11rem;
+      color : rgba(0,0,0,.65);
+    }
+    .mint-field-core:focus{
+        width: 80%;
+     border: 1px solid #1890ff;
+    }
+    .mint-cell-value{
+        width: 80%;
+       padding: 0.04rem 0.11rem;
+    }
+   }
+ }
+
+
+
+ @keyframes tranlate_bottom_to_top {
+   0%{
+     bottom: -5rem;
+   }
+   100% {
+     bottom: 0rem;
    }
  }
 

@@ -41,12 +41,16 @@ function tryHideFullScreenLoading() {
 // 请求拦截器 
 axios.interceptors.request.use(
     config => {
-        const token = localStorage.getItem('token')
-        if(token){
-            config.headers.common['Authorization'] = 'Bearer ' + token
-        }
+      const token = localStorage.getItem('token')
+      if(token){
+          config.headers.common['Authorization'] = 'Bearer ' + token
+      }
+      if(config.url =='api/idle/current' && token) {
+        return config
+      } else {
         showFullScreenLoading()
         return config
+      }
     },
     error =>{
       console.log(error.response)

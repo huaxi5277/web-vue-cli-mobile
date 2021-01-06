@@ -15,10 +15,10 @@
                 <l-button ></l-button>
             </l-form-item>
         </l-form>
-     <div class="bottom-container">
-         <router-link to="/register" class="a-style">注册账号</router-link>
+     <div class="bottom-container" v-if="flag == 'login'">
+         <a class="a-style" @click="goRegister">注册账号</a>
          <span> | </span>
-          <router-link to="/question" class="a-style">遇到问题</router-link>
+          <a  class="a-style" @click="goQuestion">遇到问题</a>
      </div>
     </div>
    </div>
@@ -64,8 +64,24 @@ export default {
         })
     },
     methods :{
+        goRegister(e){
+         e.preventDefault()
+         this.$router.push({
+             name : 'register',
+             params : {
+                routerType: 'push',   
+             }
+         })
+        },
+        goQuestion(){
+             this.$router.push({
+             name : 'question',
+             params : {
+                routerType: 'push',   
+             }
+         })
+        },
          octopus(type){
-             console.log(type )
              if(type == 'register') {
                   this.register()
              } else if(type == 'login') {
@@ -100,6 +116,11 @@ export default {
         },
         login(){
             this.$axios.post('api/idle/login' , this.model).then((ret)=>{
+                 Toast({
+                              message: ret.data.message,
+                              position: 'middle',
+                              duration: 1000
+                            });
                         if(ret.data.code == 404 ) {
                             this.$router.push('/register')
                         } else if (ret.data.code == 400 ) {
@@ -144,7 +165,7 @@ export default {
      .a-style{
          font-size: 0.3rem ;
          text-decoration: none;
-         color: #16d2bd70;
+         color: #3cfeff;
      }
      }
  }

@@ -23,7 +23,7 @@ export default {
       width: 100%;
       height: 0.6rem;
       border-radius:  0.1rem;
-      background-color: #16d2bd70;
+      background-color: #3cfeff;
       display: flex;
       justify-content: center;
       align-items: center;
